@@ -1,0 +1,41 @@
+from telegram.ext import Updater, CommandHandler
+from telegram import ParseMode
+
+# === CONFIG ===
+TOKEN = "YOUR_BOT_TOKEN"  # Replace with your real Telegram Bot Token
+OWNER_PHONE = "+233240438094"  # Your MTN MoMo number
+
+# === COMMANDS ===
+
+def start(update, context):
+    update.message.reply_text(
+        "Welcome to KwameKnowsBot!\n\nUse /get to receive today’s wisdom. Free for all!\n\nWant to support? Use /donate."
+    )
+
+def get_content(update, context):
+    content = "“Success is not final, failure is not fatal: It is the courage to continue that counts.”"
+    update.message.reply_text(content)
+    update.message.reply_text(
+        "Enjoyed that?\nSupport me via MTN MoMo: /donate", parse_mode=ParseMode.MARKDOWN
+    )
+
+def donate(update, context):
+    update.message.reply_text(
+        f"To donate:\n\n1. Dial *170#\n2. Choose *Transfer Money > MoMo User*\n3. Enter: {OWNER_PHONE}\n4. Enter amount\n\nThank you for supporting!"
+    )
+
+# === MAIN ===
+
+def main():
+    updater = Updater(TOKEN, use_context=True)
+    dp = updater.dispatcher
+
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("get", get_content))
+    dp.add_handler(CommandHandler("donate", donate))
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == "__main__":
+    main()
